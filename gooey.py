@@ -251,7 +251,7 @@ class ImageMatrixApp:
 
         if selectedOperation == "Image Compression":
             self.displayImage = imageFuncs.processImage(
-                self.displayImage, (sliderValue / 100)
+                self.originalImage, (sliderValue / 100)
             )
         # elif selectedOperation == "Scalar Addition":
         #     self.displayImage = scalarAddition(self.displayImage, sliderValue)

@@ -15,6 +15,9 @@ def processImage(img, freqCutOff):
     print(f"Size: {img.size}")
     print(f"Mode: {img.mode}")
 
+    if freqCutOff == 1.0:
+        freqCutOff -= 0.01
+
     # Convert image into array
     imgArr = np.array(img)
     # Perform the Fourier transform on the image array
