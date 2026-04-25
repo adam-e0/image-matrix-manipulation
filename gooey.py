@@ -103,10 +103,7 @@ class ImageMatrixApp:
         # These are the options shown in the dropdown.
         self.operationDropdown["values"] = [
             "Image Compression",
-            "Matrix Addition",
-            "Scalar Addition",
-            "Transpose",
-            "Transformation",
+            "Rotation",
         ]
 
         # Select the first option by default.
@@ -253,8 +250,12 @@ class ImageMatrixApp:
             self.displayImage = imageFuncs.processImage(
                 self.originalImage, (sliderValue / 100)
             )
-        # elif selectedOperation == "Scalar Addition":
-        #     self.displayImage = scalarAddition(self.displayImage, sliderValue)
+        elif selectedOperation == "Rotation":
+            self.displayImage = imageFuncs.rotateImage(
+                self.originalImage, (sliderValue / 100 * (2 * 3.14159))
+            )
+        else:
+            print("No function applied")
 
         # Re-display the current image.
         self.showImage(self.displayImage)

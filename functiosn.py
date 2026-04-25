@@ -73,3 +73,40 @@ def processImage(img, freqCutOff):
     resultImg = Image.fromarray(finalImgArr)
 
     return resultImg
+
+
+def rotateImage(img, rot):
+    imgArr = np.array(img)
+    rows = imgArr.shape[0]
+    cols = imgArr.shape[1]
+
+    channels = []
+    for c in range(imgArr.shape[2]):
+        channel = imgArr[:, :, c]
+
+        # Create coordinate grid
+        y, x = np.ogrid[:rows, :cols]
+        # Center of the image
+        cy, cx = rows / 2, cols / 2
+
+        # Rotation matrix components
+        cos_rot = np.cos(rot)
+        sin_rot = np.sin(rot)
+
+        # Apply the rotation transformation to each coordinate
+        # Equivalent to multiplying by the rotation matrix, but without building a huge matrix
+        y_rot = (y - cy) * cos_rot - (x - cx) * sin_rot + cy
+        x_rot = (y - cy) * sin_rot + (x - cx) * cos_rot + cx
+
+        # Clip to valid pixel indices and convert to integers
+        y_rot = np.clip(y_rot, 0, rows - 1).astype(int)
+        x_rot = np.clip(x_rot, 0, cols - 1).astype(int)
+
+        # Map each pixel to its rotated position
+        rotated_channel = channel[y_rot, x_rot]
+        channels.append(rotated_channel)
+
+    # Convert image array back to image
+    resultImg = Image.fromarray(np.stack(channels, axis=2).astype(np.uint8))
+
+    return resultImg
