@@ -1,3 +1,5 @@
+from PIL import Image
+
 import functiosn as imageFuncs
 
-imageFuncs.processImage("./images/flower.jpg", 0.5)
+imageFuncs.processImage(Image.open("./images/ipadmini.png"), 0.5).show()

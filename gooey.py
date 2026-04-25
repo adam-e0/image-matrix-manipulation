@@ -3,15 +3,16 @@
 import tkinter as tk
 
 # filedialog lets us open a file picker window so the user can choose an image.
-from tkinter import filedialog
-
 # ttk gives us nicer-looking tkinter widgets.
 # Here, we use it for the dropdown menu.
-from tkinter import ttk
+from tkinter import filedialog, ttk
 
 # Image lets us open and work with image files.
 # ImageTk converts Pillow images into a format tkinter can display.
 from PIL import Image, ImageTk
+
+# Import the image functions
+import functiosn as imageFuncs
 
 
 # This class represents the whole application.
@@ -70,9 +71,7 @@ class ImageMatrixApp:
         # text is what appears on the button.
         # command=self.uploadImage means run uploadImage when clicked.
         self.uploadButton = tk.Button(
-            self.controlFrame,
-            text="Upload Image",
-            command=self.uploadImage
+            self.controlFrame, text="Upload Image", command=self.uploadImage
         )
 
         # Put the button on the screen.
@@ -83,10 +82,7 @@ class ImageMatrixApp:
         # Dropdown label !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         # This label tells the user what the dropdown is for.
-        self.operationLabel = tk.Label(
-            self.controlFrame,
-            text="Select Operation:"
-        )
+        self.operationLabel = tk.Label(self.controlFrame, text="Select Operation:")
 
         # anchor="w" aligns the label to the left.
         # pady=(20, 5) gives 20 pixels above and 5 pixels below.
@@ -101,34 +97,27 @@ class ImageMatrixApp:
         # textvariable connects the dropdown to operationChoice.
         # state="readonly" means users can only select options, not type their own.
         self.operationDropdown = ttk.Combobox(
-            self.controlFrame,
-            textvariable=self.operationChoice,
-            state="readonly"
+            self.controlFrame, textvariable=self.operationChoice, state="readonly"
         )
 
         # These are the options shown in the dropdown.
         self.operationDropdown["values"] = [
-            "Zero Vector",
+            "Image Compression",
             "Matrix Addition",
             "Scalar Addition",
             "Transpose",
-            "Transformation"
+            "Transformation",
         ]
 
         # Select the first option by default.
-        # Python starts counting at 0, so 0 means "Zero Vector".
         self.operationDropdown.current(0)
-
         # Place the dropdown on the screen and stretch it horizontally.
         self.operationDropdown.pack(fill=tk.X)
 
         # Slider label !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         # This label explains what the slider controls.
-        self.sliderLabel = tk.Label(
-            self.controlFrame,
-            text="Blur / Pixel Amount:"
-        )
+        self.sliderLabel = tk.Label(self.controlFrame, text="Amount:")
 
         # Place the slider label on the left side.
         self.sliderLabel.pack(anchor="w", pady=(30, 5))
@@ -141,10 +130,10 @@ class ImageMatrixApp:
         # command=self.updateSlider means updateSlider runs whenever the slider moves.
         self.blurSlider = tk.Scale(
             self.controlFrame,
-            from_=1,
-            to=20,
+            from_=0,
+            to=100,
             orient=tk.HORIZONTAL,
-            command=self.updateSlider
+            command=self.updateSlider,
         )
 
         # Set the starting slider value to 1.
@@ -158,9 +147,7 @@ class ImageMatrixApp:
         # This button will eventually apply the selected matrix/image operation.
         # Right now, it mostly prints values and refreshes the image.
         self.applyButton = tk.Button(
-            self.controlFrame,
-            text="Apply Operation",
-            command=self.applyOperation
+            self.controlFrame, text="Apply Operation", command=self.applyOperation
         )
 
         # Place the Apply button on the screen.
@@ -174,7 +161,7 @@ class ImageMatrixApp:
             text="Created By: Adam Ettachfini, Sophie Kawi, and Zolbayar Batmunkh",
             font=("Arial", 8),
             wraplength=220,
-            justify="left"
+            justify="left",
         )
 
         # Put the creator label at the bottom of the left control panel.
@@ -188,8 +175,6 @@ class ImageMatrixApp:
             self.imageFrame,
             text="Upload an image to begin",
             bg="lightgray",
-            width=70,
-            height=30
         )
 
         # Place the image label in the right frame.
@@ -202,17 +187,16 @@ class ImageMatrixApp:
         # The filetypes list limits the visible files to images first,
         # but still allows the user to choose all files if needed.
         filePath = filedialog.askopenfilename(
-            filetypes=[
-                ("Image Files", "*.jpg *.jpeg *.png"),
-                ("All Files", "*.*")
-            ]
+            filetypes=[("Image Files", "*.jpg *.jpeg *.png"), ("All Files", "*.*")]
         )
 
         # If the user actually selected a file, filePath will not be empty.
         if filePath:
-            # Open the selected image.
+            # Open the selected image and scale it immediately using the scale function.
             # convert("RGB") makes sure every pixel has Red, Green, and Blue values.
-            self.originalImage = Image.open(filePath).convert("RGB")
+            self.originalImage = imageFuncs.scaleImage(
+                Image.open(filePath), 500
+            ).convert("RGB")
 
             # Make a copy of the original image to display/edit.
             # This keeps the original safe in case we want a reset button later.
@@ -226,19 +210,15 @@ class ImageMatrixApp:
         # Make a copy so resizing for display does not change the real image data.
         imageCopy = image.copy()
 
-        # Resize the image copy so it fits inside a 600 x 500 box.
+        # Resize the image copy so it fits within a large bounding box.
         # thumbnail keeps the image proportions, so it does not look stretched.
-        imageCopy.thumbnail((600, 500))
+        imageCopy.thumbnail((1200, 800))
 
         # Convert the Pillow image into a tkinter-compatible image.
         self.photoImage = ImageTk.PhotoImage(imageCopy)
 
         # Update the image label to show the image instead of text.
-        self.imageLabel.config(
-            image=self.photoImage,
-            text="",
-            bg=self.root.cget("bg")
-        )
+        self.imageLabel.config(image=self.photoImage, text="", bg=self.root.cget("bg"))
 
     # This function runs every time the slider moves.
     # For now, it just prints the value so we can confirm it works.
@@ -268,8 +248,11 @@ class ImageMatrixApp:
         # from functiosn.py depending on the selected operation.
         #
         # Example later:
-        # if selectedOperation == "Zero Vector":
-        #     self.displayImage = zeroVector(self.displayImage)
+
+        if selectedOperation == "Image Compression":
+            self.displayImage = imageFuncs.processImage(
+                self.displayImage, (sliderValue / 100)
+            )
         # elif selectedOperation == "Scalar Addition":
         #     self.displayImage = scalarAddition(self.displayImage, sliderValue)
 
