@@ -19,6 +19,3 @@ def processImage(inputPath, freqCutOff):
     # Add here
 
     print(imgFft)
-
-
-processImage("./images/flower.jpg", 0.5)
