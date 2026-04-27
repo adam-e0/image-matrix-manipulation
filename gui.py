@@ -12,7 +12,7 @@ from tkinter import filedialog, ttk
 from PIL import Image, ImageTk
 
 # Import the image functions
-import functiosn as imageFuncs
+import functions as imageFuncs
 
 
 # This class represents the whole application.
@@ -192,7 +192,7 @@ class ImageMatrixApp:
             # Open the selected image and scale it immediately using the scale function.
             # convert("RGB") makes sure every pixel has Red, Green, and Blue values.
             self.originalImage = imageFuncs.scaleImage(
-                Image.open(filePath), 500
+                Image.open(filePath), 700
             ).convert("RGB")
 
             # Make a copy of the original image to display/edit.
