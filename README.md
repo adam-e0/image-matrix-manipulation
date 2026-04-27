@@ -17,17 +17,23 @@ The application is built with a graphical user interface (GUI) using tkinter, ma
 
 The following example demonstrates the image compression feature using a photograph of Earth:
 
-| Original                              | Compressed                                                  |
-| ------------------------------------- | ----------------------------------------------------------- |
-| ![Earth - Original](images/earth.jpg) | ![Earth - Compressed](images/examples/earth-compressed.png) |
+<table style="width:100%">
+  <tr>
+    <td style="width:50%"><img src="images/earth.jpg" alt="Earth - Original"></td>
+    <td style="width:50%"><img src="images/examples/earth-compressed.png" alt="Earth - Compressed"></td>
+  </tr>
+</table>
 
 ### Image Rotation
 
 The following example demonstrates the image rotation feature using a photograph of a flower:
 
-| Original                                | Rotated                                                 |
-| --------------------------------------- | ------------------------------------------------------- |
-| ![Flower - Original](images/flower.jpg) | ![Flower - Rotated](images/examples/flower-rotated.png) |
+<table style="width:100%">
+  <tr>
+    <td style="width:50%"><img src="images/flower.jpg" alt="Flower - Original"></td>
+    <td style="width:50%"><img src="images/examples/flower-rotated.png" alt="Flower - Rotated"></td>
+  </tr>
+</table>
 
 ## How to Run
 
